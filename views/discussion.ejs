@@ -9,13 +9,20 @@
       <ol>
         <% for (const comment of comments) { %>
           <li>
-            <%- comment.text %>
+            <%= comment.text %>
+            <!-- xss attacks are user injected JS code through text input fields. -->
+            <!-- We can write JS code inside text input fields and do harmful things in the back-end -->
+            <!-- If we use - instead of = in the ejs tag after % sign, the input for that tag will be treated as -->
+            <!-- parsed JS code. If we use = instead of -, the code will be treated as raw text -->
+            <!-- and then we can't inject JS code through that input field. -->
+            <!-- result <script> alert("Hacked!"); </script> -->
+            <!-- User generated content should be inserted with = and the code written by the developer -->
+            <!-- can be inserted with - sign because that code should be parsed inside the back-end code. -->
           </li>
         <% } %>
       </ol>
     </section>
     <section>
-
       <form action="/discussion/comment" method="POST">
         <div class="form-control">
           <label for="comment">My Comment</label>
